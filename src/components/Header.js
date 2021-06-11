@@ -43,8 +43,8 @@ const Header = () => {
             </p>
           <h1>Contact me</h1>
           <p>You can easily contact me using either my email or any social media</p>
-          <a href = "mailto:xxx@xxx.xxx" target="_blank" rel="noopener noreferrer">
-          <h2><SiGmail></SiGmail>no mail atm</h2>
+          <a href = "mailto:tripp@trippmedia.tech" target="_blank" rel="noopener noreferrer">
+          <h2><SiGmail></SiGmail> Tripp@trippmedia.tech</h2>
           </a>
           <a href = "https://www.instagram.com/tripp.h265/" target="_blank" rel="noopener noreferrer">
           <h2><SiInstagram></SiInstagram> @Tripp.h265</h2>
