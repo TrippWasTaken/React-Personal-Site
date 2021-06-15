@@ -8,7 +8,7 @@ const VidList = () => {
   }
 
   return (
-    <div className="vidCont">
+    <section className="vidCont">
       
       <div className = "vidGallery">
         <h1>Personal Work</h1>
@@ -21,7 +21,7 @@ const VidList = () => {
         <p>Some recent examples of my client work</p>
         <VideoSlider videos = {vidDict.paid} />
       </div>
-    </div>
+    </section>
   )
 }
 export default VidList

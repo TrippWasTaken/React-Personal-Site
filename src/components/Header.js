@@ -1,12 +1,25 @@
 import { useState } from "react"
+import VidList from './VidList';
 import {SiInstagram, SiTwitter, SiGmail, SiYoutube} from "react-icons/si"
 const Header = () => {
 
   const [modal, setModal] = useState(false)
+  const [content, setContent] = useState(false)
 
   const toggleModal = () => {
     setModal(!modal)
   }
+
+  const toggleContent = () =>{
+    setContent(!content)
+    console.log(content)
+    if(content){
+      document.getElementById("toggleContentBtn").textContent = "Music"
+    }else{
+      document.getElementById("toggleContentBtn").textContent = "Video"
+    }
+  }
+
 
   if (modal) {
     document.body.classList.add("activeModal")
@@ -22,7 +35,7 @@ const Header = () => {
         </div>
         <div className="headerNav">
           <button className="headerBtn" onClick={toggleModal}>About</button>
-          <button className="headerBtn">Music</button>
+          <button className="headerBtn" id="toggleContentBtn" onClick = {toggleContent}> Music</button>
         </div>
       </div>
       {
@@ -58,6 +71,12 @@ const Header = () => {
           </div>
           <div className="overlay" onClick={toggleModal}></div>
         </div>
+      }
+      {
+        !content && <VidList />
+      }
+      {
+        content && <h1>The Music tab is still wip</h1>
       }
     </section>
   )
