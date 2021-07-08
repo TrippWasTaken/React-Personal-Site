@@ -1,5 +1,6 @@
 import { useState } from "react"
 import VidList from './VidList';
+import Music from './Music'
 import {SiInstagram, SiTwitter, SiGmail, SiYoutube} from "react-icons/si"
 const Header = () => {
 
@@ -12,7 +13,6 @@ const Header = () => {
 
   const toggleContent = () =>{
     setContent(!content)
-    console.log(content)
     if(content){
       document.getElementById("toggleContentBtn").textContent = "Music"
     }else{
@@ -76,7 +76,7 @@ const Header = () => {
         !content && <VidList />
       }
       {
-        content && <h1>The Music tab is still wip</h1>
+        content && <Music />
       }
     </section>
   )

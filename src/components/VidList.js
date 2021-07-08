@@ -3,7 +3,7 @@ import VideoSlider from './VideoSlider'
 
 const VidList = () => {
   const vidDict = {
-    personal: ["eWZsTewx5us","jYJS-fwJ5kA", "szfDKGZlYpo", "9AE5p58tDBY", "H5-xG9yBZcM"],
+    personal: ["ppGy206YO4A","eWZsTewx5us","jYJS-fwJ5kA", "szfDKGZlYpo", "9AE5p58tDBY", "H5-xG9yBZcM"],
     paid: ["BqvH8HA2Q9w", "tb-Zf6o-aKY"]
   }
 
