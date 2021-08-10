@@ -7,6 +7,7 @@ import song4 from './resources/audio/4.mp3'
 import * as THREE from "three"
 
 import CameraControls from 'camera-controls';
+import { randInt } from 'three/src/math/MathUtils'
 CameraControls.install({ THREE: THREE });
 
 
@@ -45,14 +46,15 @@ const Music = () => {
         analyser.maxDecibels = -10;
 
         //setting up visualizer buffers
-        analyser.fftSize = 1024
+        analyser.fftSize = 512
         const bufferLength = analyser.frequencyBinCount
         const dataArray = new Uint8Array(bufferLength)
 
         //Three
         const scene = new THREE.Scene()
-        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 2000)
-        camera.position.set(0, 200, 500)
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.0001, 5000)
+        camera.position.set(-200, 200, 400)
+        //camera.lookAt(500,0,0)
 
         const renderer = new THREE.WebGL1Renderer();
         renderer.setSize(window.innerWidth / 2, window.innerHeight / 2)
@@ -62,71 +64,75 @@ const Music = () => {
         const clock = new THREE.Clock();
         const cameraControls = new CameraControls(camera, renderer.domElement);
 
-        const addL = () => {
+        const addLines = () => {
             let z = 0
             const geometry = new THREE.BufferGeometry()
-            const material = new THREE.PointsMaterial({
-                size: 1
-            })
-            for (let l = 0; l < 20; l++) {
-                // for (let i = 0; i < data.length; i++) {
-                //     positions[3 * i] = ((window.innerWidth / 4) / (data.length) * i)   //x
-                // }
-                // geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
-                const line = new THREE.Points(geometry, material)
+            for (let l = 0; l < 100; l++) {
+                const material = new THREE.PointsMaterial({
+                    size: 1
+                })
+                const line = new THREE.Points(new THREE.BufferGeometry(), material)
                 line.translateZ(z)
-
-                // for (let i = 0; i < data.length; i++) {
-                //     positions[3 * i + 1] = (data[i]) * -1   //y
-                // }
-                // geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
                 lines.add(line)
-
                 z = z - 10
             }
         }
         scene.add(lines);
+        const dataC = []
 
-        const moveL = (dataAudio) => {
+        const moveL = (dataAudio, i) => {
             const dataA = dataAudio
             const dataB = dataAudio.slice().reverse()
             const data = [...dataB, ...dataA]
             const positions = new Float32Array(data.length * 3)
-            for (let i = 0; i < data.length; i++) {
-                positions[3 * i] = ((window.innerWidth / 4) / (data.length) * i)   //x
-            }
-            for (let i = 0; i < lines.children.length; i++) {
-                for (let i = 0; i < data.length; i++) {
-                    positions[3 * i + 1] = (data[i]) * -1   //y
+            const loudness = Math.max(...dataAudio)
+            for (let i = dataC.length - 1; i > 0; i--) {
+                const current = lines.children[i].geometry.getAttribute('position')
+                const l = (dataC.length - i) / dataC.length * loudness
+                if (current) {
+                    current.array = dataC[i - 1]
+                    lines.children[i].material.color = new THREE.Color('hsl(' + l + ', 100%, 50%)')
+                    current.needsUpdate = true
+                } else {
+                    lines.children[i].geometry.setAttribute('position', new THREE.BufferAttribute(dataC[i - 1], 3))
                 }
-                lines.children[i].geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+            }
+
+            for (let y = 0; y < data.length; y++) {
+                positions[3 * y + 1] = data[y] * -1 //y
+                positions[3 * y] = ((window.innerWidth / 4) / (data.length) * y)   //x
+            }
+
+            lines.children[i].geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+            lines.children[i].material.color = new THREE.Color('hsl(' + loudness + ', 100%, 50%)')
+
+            dataC.unshift(positions)
+            if (dataC.length > lines.children.length) {
+                dataC.pop()
             }
         }
 
         let last = 0
+        let i = 0
         const animate = (now) => {
             if (!last || now - last >= 5) {
-                last = now
                 analyser.getByteFrequencyData(dataArray)
-                moveL(dataArray)
+                last = now
+                moveL(dataArray, 0)
             }
-
             const delta = clock.getDelta();
             const hasControlsUpdated = cameraControls.update(delta);
-
             renderer.render(scene, camera)
             requestAnimationFrame(animate)
         };
-
-        addL()
-        console.table(lines)
+        
+        addLines()
         animate()
     }, [])
 
     const onSwitch = event => {
         switchSong(event.target.dataset.url)
     }
-
     return (
         <section className="musicCont">
             <h1>This area is still WIP</h1>
