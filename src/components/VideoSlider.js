@@ -9,9 +9,9 @@ const VideoSlider = (props) => {
   const length = props.videos.length
 
   return (
-    <div className="sliderCont">
+    <container className="sliderCont">
       <section className="slider">
-        <MdKeyboardArrowLeft className="leftA" id = "Arrow" onClick={() => setCurrent(current === 0 ? length - 1 : current - 1)} />
+        {/* <MdKeyboardArrowLeft className="leftA" id = "Arrow" onClick={() => setCurrent(current === 0 ? length - 1 : current - 1)} /> */}
         {
           props.videos.map((link, index) => (
             <div className={index === current ? "slideActive" : "slide"} key={index} >
@@ -21,9 +21,9 @@ const VideoSlider = (props) => {
             </div>
           ))
         }
-        <MdKeyboardArrowRight className="rightA" id = "Arrow" onClick={() => setCurrent(current === length - 1 ? 0 : current + 1)} />
+        {/* <MdKeyboardArrowRight className="rightA" id = "Arrow" onClick={() => setCurrent(current === length - 1 ? 0 : current + 1)} /> */}
       </section>
-      <div className = "thumbnails">
+      <section className = "thumbnails">
         {
           props.videos.map((link, index) => (
             <div className = {index === current ? "thumbActive" : "thumb"} key = {index} onClick={()=>setCurrent(index)}>
@@ -31,8 +31,8 @@ const VideoSlider = (props) => {
             </div>
           ))
         } 
-      </div>
-    </div>
+      </section>
+    </container>
   )
 }
 export default VideoSlider

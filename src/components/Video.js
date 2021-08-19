@@ -2,9 +2,12 @@ import ReactPlayer from 'react-player'
 
 const Video = (props) => {
   return (
-    <div className = "video">
-      <ReactPlayer 
-      url={"https://www.youtube.com/watch/"+ props.link}
+    <div className = "videoCont">
+      <ReactPlayer className= "reactPlayer"
+      url={"https://youtu.be/"+ props.link}
+      controls={true}
+      width="100%"
+      height="100%"
       />
     </div>
   )

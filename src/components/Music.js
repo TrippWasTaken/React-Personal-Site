@@ -57,7 +57,7 @@ const Music = () => {
         //camera.lookAt(500,0,0)
 
         const renderer = new THREE.WebGL1Renderer();
-        renderer.setSize(window.innerWidth / 2, window.innerHeight / 2)
+        renderer.setSize(window.innerWidth/1.5, window.innerHeight /1.5)
         ref.current.appendChild(renderer.domElement)
 
         const lines = new THREE.Group()
@@ -67,7 +67,7 @@ const Music = () => {
         const addLines = () => {
             let z = 0
             const geometry = new THREE.BufferGeometry()
-            for (let l = 0; l < 100; l++) {
+            for (let l = 0; l < 200; l++) {
                 const material = new THREE.PointsMaterial({
                     size: 1
                 })
@@ -155,6 +155,5 @@ const Music = () => {
         </section>
     )
 }
-
 
 export default Music
