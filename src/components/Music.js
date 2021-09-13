@@ -5,9 +5,7 @@ import song2 from './resources/audio/2.mp3'
 import song3 from './resources/audio/3.mp3'
 import song4 from './resources/audio/4.mp3'
 import * as THREE from "three"
-
 import CameraControls from 'camera-controls';
-import { randInt } from 'three/src/math/MathUtils'
 CameraControls.install({ THREE: THREE });
 
 
@@ -34,7 +32,6 @@ const Music = () => {
     let ref = useRef(null)
 
     useEffect(() => {
-        //setting up audio
         const context = new (window.AudioContext || window.webkitAudioContext)()
         const analyser = context.createAnalyser();
         audioDiv = document.getElementById("songSource")
@@ -45,14 +42,13 @@ const Music = () => {
         analyser.minDecibels = -100;
         analyser.maxDecibels = -10;
 
-        //setting up visualizer buffers
         analyser.fftSize = 512
         const bufferLength = analyser.frequencyBinCount
         const dataArray = new Uint8Array(bufferLength)
 
         //Three
         const scene = new THREE.Scene()
-        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.0001, 5000)
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 5000)
         camera.position.set(-200, 200, 400)
         //camera.lookAt(500,0,0)
 
@@ -66,15 +62,14 @@ const Music = () => {
 
         const addLines = () => {
             let z = 0
-            const geometry = new THREE.BufferGeometry()
-            for (let l = 0; l < 200; l++) {
-                const material = new THREE.PointsMaterial({
+            for (let l = 0; l < 256; l++) {
+                const material = new THREE.LineBasicMaterial({
                     size: 1
                 })
-                const line = new THREE.Points(new THREE.BufferGeometry(), material)
+                const line = new THREE.Line(new THREE.BufferGeometry(), material)
                 line.translateZ(z)
                 lines.add(line)
-                z = z - 10
+                z = z - 5
             }
         }
         scene.add(lines);
@@ -99,8 +94,8 @@ const Music = () => {
             }
 
             for (let y = 0; y < data.length; y++) {
-                positions[3 * y + 1] = data[y] * -1 //y
-                positions[3 * y] = ((window.innerWidth / 4) / (data.length) * y)   //x
+                positions[3 * y + 1] = data[y] * 1 //y
+                positions[3 * y] = ((window.innerWidth) / (data.length) * y)   //x
             }
 
             lines.children[i].geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
@@ -113,7 +108,6 @@ const Music = () => {
         }
 
         let last = 0
-        let i = 0
         const animate = (now) => {
             if (!last || now - last >= 5) {
                 analyser.getByteFrequencyData(dataArray)
@@ -121,7 +115,7 @@ const Music = () => {
                 moveL(dataArray, 0)
             }
             const delta = clock.getDelta();
-            const hasControlsUpdated = cameraControls.update(delta);
+            cameraControls.update(delta);
             renderer.render(scene, camera)
             requestAnimationFrame(animate)
         };
